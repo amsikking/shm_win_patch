@@ -95,8 +95,7 @@ def _SharedMemory_init(self, name=None, create=False, size=0):
             self.unlink()
             raise
 
-        from multiprocessing.resource_tracker import register
-        register(self._name, "shared_memory")
+        resource_tracker.register(self._name, "shared_memory")
 
     else:
 
@@ -127,7 +126,7 @@ def _SharedMemory_init(self, name=None, create=False, size=0):
                             )
                         else:
                             continue
-                    self._mmap = mmap.mmap(-1, size, tagname=temp_name, access=mmap.ACCESS_READ)
+                    self._mmap = mmap.mmap(-1, size, tagname=temp_name)
                 finally:
                     _winapi.CloseHandle(h_map)
                 self._name = temp_name
