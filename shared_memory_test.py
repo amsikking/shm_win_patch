@@ -1,11 +1,13 @@
 ##import shm_win_patch
 from multiprocessing import shared_memory as sm
 
-def get_shared_memory(i, size_bytes):
+def get_shared_memory(i, size_bytes, write=False):
     print('getting shared memory: size=%0.2fGB, iteration=%03d'%(
         1e-9 * size_bytes, i))
-    shm1 = sm.SharedMemory(create=True,  size=size_bytes) # get some
-    shm2 = sm.SharedMemory(create=False, name=shm1.name)  # take a look
+    shm1 = sm.SharedMemory(create=True,  size=size_bytes)   # get some
+    if write: # optionally force memory allocation
+        shm1.buf[:] = bytearray(size_bytes) 
+    shm2 = sm.SharedMemory(create=False, name=shm1.name)    # take a look
     shm1.unlink()
     shm1.close()
     shm2.unlink()
