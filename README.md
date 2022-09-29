@@ -3,6 +3,7 @@ Fix a memory leak in SharedMemory on **Windows**, i.e. the main Class from Pytho
 - https://docs.python.org/3/library/multiprocessing.shared_memory.html
 
 ## Bug details and status:
+If 2 or more shared memory objects are created the .unlink() method fails (on windows) so that the memory is not released until all associated process finish (i.e. memory is potentially consumed continuously and not released):
 - https://stackoverflow.com/questions/65968882/unlink-does-not-work-in-pythons-shared-memory-on-windows
 - https://github.com/python/cpython/pull/20684
 - https://bugs.python.org/issue40882
